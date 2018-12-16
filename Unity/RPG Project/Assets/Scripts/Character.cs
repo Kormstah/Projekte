@@ -5,13 +5,17 @@ using UnityEngine;
 public abstract class Character : MonoBehaviour
 {
 
-	private float speed=5;
-	protected private Vector2 direction;
+	[SerializeField]
+	private float speed;
+
+	Animator animator;
+
+	protected Vector2 direction;
 
 	// Use this for initialization
-	void Start()
+	protected virtual void Start()
 	{
-
+		animator = GetComponent<Animator>();
 	}
 
 	// Update is called once per frame
@@ -25,6 +29,25 @@ public abstract class Character : MonoBehaviour
 	public void Move()
 	{
 		transform.Translate(direction * speed * Time.deltaTime);
+
+		if(direction.x != 0 || direction.y != 0)
+		{
+			AnimateMovement(direction);
+		}
+		else
+		{
+			animator.SetLayerWeight(1, 0);
+		}
+
+		
+	}
+
+	public void AnimateMovement(Vector2 dir)
+	{
+		animator.SetLayerWeight(1, 1);
+
+		animator.SetFloat("x", dir.x);
+		animator.SetFloat("y", dir.y);
 	}
 }
 
